@@ -15,7 +15,7 @@ const PORT=3001
 
 app.use(express.static('public'));
 app.use('/api',apiRoutes);
-app.use('/html',htmlRoutes);
+app.use('/',htmlRoutes);
 
 
 

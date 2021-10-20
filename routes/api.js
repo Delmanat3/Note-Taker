@@ -4,8 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const app = require("express").Router();
 
-const rando = require('../Цікавий')
-
+const rando = require('../idgen')
 
 /*
     .delete?
@@ -17,9 +16,28 @@ const rando = require('../Цікавий')
       } else{
           console.log("guess ill die")
  })
- stringify the response of the splice then write to db.json?
 
+ stringify the response of the splice then write to db.json?
+ res.json(db)
  */
+
+  
+app.delete("/notes/:id", (req, res) => {
+    let fileyBoy = path.join(__dirname, "../db/db.json");
+    for (i = 0; i < db.length; i++) {
+      if (db[i].id == req.params.id) {
+        db.splice(i, 1);
+    }
+    }
+    
+    fs.writeFile(fileyBoy, JSON.stringify(db), (err) => {
+        if(err){
+            console.log('dang this was kinda simple')
+        }else{
+      res.json(db)
+        }
+    })
+});
 
 
 
@@ -32,21 +50,6 @@ app.get('/notes', (req,res)=>{
 }
 )
 
-// const writeToFile = (destination, content) =>
-//   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
-//     err ? console.error(err) : console.info(`\nData written to ${destination}`)
-//   );
-// const readAndAppend = (content , file) => {
-//     fs.readFile(file, 'utf8', (err, data) => {
-//       if (err) {
-//         console.error(err);
-//       } else {
-//         const parsedData = JSON.parse(data);
-//         parsedData.push(content);
-//         writeToFile(file, parsedData);
-//       }
-//     });
-//   };
 
 app.post('/notes',(req,res)=>{
     console.log('be warned \n your pathetic attempt has been noticed')
@@ -68,11 +71,12 @@ app.post('/notes',(req,res)=>{
     db.push(sirNote)
 
     
-    fs.writeFile(fileyBoy, JSON.stringify(db), function (err) {
-        err
+    fs.writeFile(fileyBoy, JSON.stringify(db), (err)=> {
+        if(err){
            console.log(err)
+        }else{
            console.log('fortune favored you this time boy.');
-          
+        } 
       });
     
       
@@ -83,6 +87,22 @@ app.post('/notes',(req,res)=>{
 
 module.exports = app;
 
+  
+// const writeToFile = (destination, content) =>
+//   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+//     err ? console.error(err) : console.info(`\nData written to ${destination}`)
+//   );
+// const readAndAppend = (content , file) => {
+//     fs.readFile(file, 'utf8', (err, data) => {
+//       if (err) {
+//         console.error(err);
+//       } else {
+//         const parsedData = JSON.parse(data);
+//         parsedData.push(content);
+//         writeToFile(file, parsedData);
+//       }
+//     });
+//   };
 
 // app.post('/api/reviews', (req, res) => {
 //     // Log that a POST request was received

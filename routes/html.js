@@ -10,7 +10,7 @@ app.get('/notes', (req, res) => {
 
 // if * goes to the index bc readme but im not sure 
 app.get('*', (req, res) => {
-    console.info(`${req.method} req goin in ${req.path} received`)
+    console.info(`${req.method} request goin in ${req.path} received`)
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 

@@ -1,16 +1,34 @@
 
 const db = require("../db/db");
 const fs = require("fs");
-//const path = require("path");
+const path = require("path");
 const app = require("express").Router();
 
 const rando = require('../Цікавий')
 
-app.get('/notes', (req,res)=>{
-    console.log(`${req.method} request received so calm your pretty little ass down `)
-    console.log('//////be patient you lazy fuck////////')
-    res.status(200).json(db);
 
+/*
+    .delete?
+ app.splice?("/notes/:id",(req,res)=>{
+     let fileyBoy=path.join(_dirname, '../db/db.json')
+     for (var i; i = 0; i < db.length; i++) {
+//     if (db[i].id == req.params.id) {
+//       db.splice(i, 1);
+      } else{
+          console.log("guess ill die")
+ })
+ stringify the response of the splice then write to db.json?
+
+ */
+
+
+
+
+
+app.get('/notes', (req,res)=>{
+    console.log(`${req.method} request received so calm your pretty little ass down\n//////showing you the fucking list you dirty bastard//////// `)
+    res.status(200).json(db);
+    
 }
 )
 
@@ -18,24 +36,24 @@ app.get('/notes', (req,res)=>{
 //   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
 //     err ? console.error(err) : console.info(`\nData written to ${destination}`)
 //   );
-const readAndAppend = (content , file) => {
-    fs.readFile(file, 'utf8', (err, data) => {
-      if (err) {
-        console.error(err);
-      } else {
-        const parsedData = JSON.parse(data);
-        parsedData.push(content);
-        writeToFile(file, parsedData);
-      }
-    });
-  };
+// const readAndAppend = (content , file) => {
+//     fs.readFile(file, 'utf8', (err, data) => {
+//       if (err) {
+//         console.error(err);
+//       } else {
+//         const parsedData = JSON.parse(data);
+//         parsedData.push(content);
+//         writeToFile(file, parsedData);
+//       }
+//     });
+//   };
 
 app.post('/notes',(req,res)=>{
     console.log('be warned \n your pathetic attempt has been noticed')
     //if(req.body && req.title){
 
    // }
-    //let fileyBoy = path.join(__dirname, "../db/db.json");
+    let fileyBoy = path.join(__dirname, "../db/db.json");
 
     
     let sirNote = req.body
@@ -44,21 +62,26 @@ app.post('/notes',(req,res)=>{
     
     console.log(`Your note has it's own designation.... isn't that cute. here it is:${sirNote.id}`)
 
-    readAndAppend(sirNote, db);
-    res.json('fortune favored you this time boy.');
+    //readAndAppend(sirNote, db);
+    //res.json('fortune favored you this time boy.');
     //res.error('Error in adding tip');
-    //db.push(sirNote)
+    db.push(sirNote)
 
     
-    // fs.writeFile(fileyBoy, JSON.stringify(db), function (err) {
-    //     err
-    //       ? console.log(err)
-    //       : console.log('fortune favored you this time boy.');
-    //   });
+    fs.writeFile(fileyBoy, JSON.stringify(db), function (err) {
+        err
+           console.log(err)
+           console.log('fortune favored you this time boy.');
+          
+      });
     
       
-     // res.json(sirNote);
+     res.json(sirNote);
 })
+
+
+
+module.exports = app;
 
 
 // app.post('/api/reviews', (req, res) => {
@@ -82,4 +105,3 @@ app.post('/notes',(req,res)=>{
 //     // Log the response body to the console
 //     console.log(req.body);
 //   });
-module.exports = app;

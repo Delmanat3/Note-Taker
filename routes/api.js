@@ -1,12 +1,12 @@
 
 const db = require("../db/db");
 const fs = require("fs");
-const path = require("path");
+//const path = require("path");
 const app = require("express").Router();
 
 const rando = require('../Цікавий')
 
-app.GET('/notes', (req,res)=>{
+app.get('/notes', (req,res)=>{
     console.log(`${req.method} request received so calm your pretty little ass down `)
     console.log('//////be patient you lazy fuck////////')
     res.status(200).json(db);
@@ -14,30 +14,50 @@ app.GET('/notes', (req,res)=>{
 }
 )
 
+const writeToFile = (destination, content) =>
+  fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
+    err ? console.error(err) : console.info(`\nData written to ${destination}`)
+  );
+const readAndAppend = (content , file) => {
+    fs.readFile(file, 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const parsedData = JSON.parse(data);
+        parsedData.push(content);
+        writeToFile(file, parsedData);
+      }
+    });
+  };
 
 app.post('/notes',(req,res)=>{
     console.log('be warned \n your pathetic attempt has been noticed')
     //if(req.body && req.title){
 
    // }
-    let fileyBoy = path.join(__dirname, "../db/db.json");
+    //let fileyBoy = path.join(__dirname, "../db/db.json");
 
+    
     let sirNote = req.body
 
     sirNote.id = rando()
-
+    
     console.log(`Your note has it's own designation.... isn't that cute. here it is:${sirNote.id}`)
 
-    db.push(sirNote)
+    readAndAppend(sirNote, db);
+    res.json('fortune favored you this time boy.');
+    //res.error('Error in adding tip');
+    //db.push(sirNote)
 
-    fs.writeFile(fileyBoy, JSON.stringify(db), function (err) {
-        err
-          ? console.log(err)
-          : console.log('fortune favored you this time boy.');
-      });
+    
+    // fs.writeFile(fileyBoy, JSON.stringify(db), function (err) {
+    //     err
+    //       ? console.log(err)
+    //       : console.log('fortune favored you this time boy.');
+    //   });
     
       
-      res.json(note);
+     // res.json(sirNote);
 })
 
 
